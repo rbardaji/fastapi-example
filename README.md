@@ -68,3 +68,18 @@ Copy the code above to a file named main.py, and just like that, you have a full
 
 This code defines your application, but it won’t run on itself if you call it with python directly. To run it, you need a server program. In the steps above, you already installed Uvicorn. That will be your server.
 
+## Run the First API App With Uvicorn
+
+Run the live server using Uvicorn:
+
+```shell
+$ uvicorn main:app --reload
+
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [28720]
+INFO:     Started server process [28722]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+The first info line in the output shows the URL where your app is being served in your local machine. Since you used --reload for development, when you update your application code, the server will reload automatically.
