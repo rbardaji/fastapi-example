@@ -32,7 +32,7 @@ FastAPI is a modern, high-performance web framework for building APIs with Pytho
 
 The framework is designed to optimize your developer experience so that you can write simple code to build production-ready APIs with best practices by default.
 
-# Install FastAPI
+## Install FastAPI
 
 As with any other Python project, it would be best to start by creating a virtual environment. If you are not familiar with how to do that, then you can check out the [Primer on Virtual Environments](https://realpython.com/python-virtual-environments-a-primer/).
 
@@ -43,3 +43,28 @@ python -m pip install fastapi uvicorn[standard]
 ```
 
 With that, you have FastAPI and Uvicorn installed and are ready to learn how to use them. FastAPI is the framework you’ll use to build your API, and Uvicorn is the server that will use the API you build to serve requests.
+
+## First Steps
+
+To get started, in this section, you will create a minimal FastAPI app, run it with a server using Uvicorn, and then learn all the interacting parts. This will give you a very quick overview of how everything works.
+
+### Create a First API
+
+A basic FastAPI file looks like this:
+
+```python
+# main.py
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+```
+
+Copy the code above to a file named main.py, and just like that, you have a fully functional API application with some best practices like automatic documentation and serialization built in. You will learn more about those features next.
+
+This code defines your application, but it won’t run on itself if you call it with python directly. To run it, you need a server program. In the steps above, you already installed Uvicorn. That will be your server.
+
