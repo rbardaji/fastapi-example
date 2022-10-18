@@ -190,3 +190,10 @@ This is because the path parameter item_id has a value of "foo", which is not an
 The same error would appear if you provided a float instead of an int, such as if you opened http://127.0.0.1:8000/items/4.2 in your browser. So, with the same Python type hint, FastAPI gives you both **data parsing** and **data validation**.
 
 Also notice that the error clearly states the exact point where the validation didn’t pass. This is incredibly helpful while developing and debugging code that interacts with your API.
+
+## Data Handling With pydantic
+
+All the data validation is performed under the hood by pydantic, so you get all the benefits from it, and you know you are in good hands.
+
+You can use the same type declarations with str, float, bool and many other complex data types.
+
