@@ -136,3 +136,22 @@ So, if you run this example and go to http://127.0.0.1:8000/items/foo, you will 
 
 The response contains "foo", which is what was passed in the item_id path parameter and then returned in a dictionary.
 
+### Path Parameters With Types
+
+You can declare the type of a path parameter in the function using standard Python type hints:
+
+```python
+# main.py
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/items/{item_id}")
+async def read_item(item_id: int):
+    return {"item_id": item_id}
+```
+
+In this case, you declare item_id to be an int.
+
+Declaring the type of a path parameter will give you editor support inside of your function, with error checks, completion, and so on.
