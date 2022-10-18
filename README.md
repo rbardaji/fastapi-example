@@ -191,13 +191,13 @@ The same error would appear if you provided a float instead of an int, such as i
 
 Also notice that the error clearly states the exact point where the validation didn’t pass. This is incredibly helpful while developing and debugging code that interacts with your API.
 
-## Data Handling With pydantic
+### Data Handling With pydantic
 
 All the data validation is performed under the hood by pydantic, so you get all the benefits from it, and you know you are in good hands.
 
 You can use the same type declarations with str, float, bool and many other complex data types.
 
-## Order Matters: Put Fixed Paths First
+### Order Matters: Put Fixed Paths First
 
 When creating path operations, you may find situations where you have a fixed path, like /users/me. Let’s say that it’s to get data about the current user. You might also have the path /users/{user_id} to get data about a specific user by some user ID.
 
@@ -220,3 +220,14 @@ async def read_user(user_id: str):
 ```
 
 Otherwise, the path for /users/{user_id} would also match for /users/me, thinking that it’s receiving the parameter user_id with a value of "me".
+
+## Request Body: Receiving JSON Data
+
+When you need to send data from a client to your API, you send it as a request body.
+
+A **request body** is data sent by the client to your API. A **response body** is the data your API sends to the client. Your API almost always has to send a response body. But clients don’t necessarily need to send request bodies all the time.
+
+> ***NOTE:*** To send data, you should use POST (the most common approach), PUT, DELETE, or PATCH. Sending a body with a GET request has undefined behavior in the specifications. Nevertheless, using a GET request is supported by FastAPI, though only for very complex or extreme use cases. As it is discouraged, the interactive documentation with Swagger UI won’t show the documentation for the body when using GET, and proxies in the middle might not support it.
+
+To declare a request body, you use pydantic models, with all their power and benefits. You’ll learn more about them below.
+
