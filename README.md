@@ -231,3 +231,120 @@ A **request body** is data sent by the client to your API. A **response body** i
 
 To declare a request body, you use pydantic models, with all their power and benefits. You’ll learn more about them below.
 
+### Use pydantic to Declare JSON Data Models (Data Shapes)
+
+First, you need to import BaseModel from pydantic and then use it to create subclasses defining the **schema**, or data shapes, you want to receive.
+
+Next, you declare your data model as a class that inherits from BaseModel, using standard Python types for all the attributes:
+
+```python
+# main.py
+
+from typing import Optional
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+class Item(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    tax: Optional[float] = None
+
+app = FastAPI()
+
+@app.post("/items/")
+async def create_item(item: Item):
+    return item
+```
+
+When a model attribute has a default value, it is not required. Otherwise, it is required. To make an attribute optional, you can use [None](https://realpython.com/null-in-python/).
+
+For example, the model above declares a JSON object (or Python dict) like this:
+
+```json
+{
+    "name": "Foo",
+    "description": "An optional description",
+    "price": 45.2,
+    "tax": 3.5
+}
+```
+
+In this case, since description and tax are optional because they have a default value of None, this JSON object would also be valid:
+
+```json
+{
+    "name": "Foo",
+    "price": 45.2
+}
+```
+
+A JSON object that omits the default values is also valid.
+
+Next, add the new pydantic model to your path operation as a parameter. You declare it the same way you declared path parameters:
+
+```python
+# main.py
+
+from typing import Optional
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+class Item(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    tax: Optional[float] = None
+
+app = FastAPI()
+
+@app.post("/items/")
+async def create_item(item: Item):
+    return item
+
+```
+
+The parameter ```item``` has a type hint of ```Item```, which means that item is declared as an instance of the class ```Item```.
+
+With that Python type declaration, FastAPI will:
+
+* Read the body of the request as JSON
+* Convert the corresponding types if needed
+* Validate the data and return a clear error if it is invalid
+* Give you the received data in the parameter item—since you declared it to be of type Item, you will also have all the editor support, with completion and type checks for all the attributes and their types
+* Generate [JSON Schema](https://json-schema.org/) definitions for your model that you can also use anywhere else that makes sense for your project
+
+By using standard type hints with pydantic, FastAPI helps you build APIs that have all these best practices by default, with little effort.
+
+### Use the pydantic Model
+
+Inside the function, you can access all the attributes of the model object directly:
+
+```python
+# main.py
+
+from typing import Optional
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+class Item(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    tax: Optional[float] = None
+
+app = FastAPI()
+
+@app.post("/items/")
+async def create_item(item: Item):
+    item_dict = item.dict()
+    if item.tax:
+        price_with_tax = item.price + item.tax
+        item_dict.update({"price_with_tax": price_with_tax})
+    return item_dict
+```
+
+The parameter item is declared as an instance of the class Item, and FastAPI will make sure that you receive exactly that in your function instead of a dictionary or something else.
