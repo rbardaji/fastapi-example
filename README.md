@@ -379,3 +379,95 @@ async def create_item(item_id: int, item: Item):
 This way, you can declare path parameters and JSON request bodies, and FastAPI will take care of doing all the data validation, serialization, and documentation for you. You could verify it by going to the same API documentation at /docs or by using other tools like [Postman](https://www.postman.com/) with a graphical interface or [Curl](https://curl.se/docs/httpscripting.html) in the command line.
 
 In a similar way, you can declare more complex request bodies, like lists, and other types of request data, like query parameters, cookies, headers, form inputs, files, and so on.
+
+## Query Parameters¶
+
+When you declare other function parameters that are not part of the path parameters, they are automatically interpreted as "query" parameters.
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
+
+
+@app.get("/items/")
+async def read_item(skip: int = 0, limit: int = 10):
+    return fake_items_db[skip : skip + limit]
+```
+The query is the set of key-value pairs that go after the ```?``` in a URL, separated by ```&``` characters.
+
+For example, in the URL:
+
+```shell
+http://127.0.0.1:8000/items/?skip=0&limit=10
+```
+
+...the query parameters are:
+
+* ```skip```: with a value of ```0```
+* ```limit```: with a value of ```10```
+
+As they are part of the URL, they are "naturally" strings.
+
+But when you declare them with Python types (in the example above, as ```int```), they are converted to that type and validated against it.
+
+All the same process that applied for path parameters also applies for query parameters:
+
+* Editor support (obviously)
+* Data "parsing"
+* Data validation
+* Automatic documentation
+
+### Defaults
+
+As query parameters are not a fixed part of a path, they can be optional and can have default values.
+
+In the example above they have default values of skip=0 and limit=10.
+
+So, going to the URL:
+
+```shell
+http://127.0.0.1:8000/items/
+```
+
+would be the same as going to:
+
+```shell
+http://127.0.0.1:8000/items/?skip=0&limit=10
+```
+
+But if you go to, for example:
+
+```shell
+http://127.0.0.1:8000/items/?skip=20
+```
+
+The parameter values in your function will be:
+
+skip=20: because you set it in the URL
+limit=10: because that was the default value
+
+### Optional parameters¶
+
+The same way, you can declare optional query parameters, by setting their default to ```None```:
+
+
+```pyhton
+from typing import Union
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_item(item_id: str, q: Union[str, None] = None):
+    if q:
+        return {"item_id": item_id, "q": q}
+    return {"item_id": item_id}
+```
+
+In this case, the function parameter ```q``` will be optional, and will be ```None``` by default.
+
