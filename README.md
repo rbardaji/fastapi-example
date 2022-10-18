@@ -155,3 +155,15 @@ async def read_item(item_id: int):
 In this case, you declare item_id to be an int.
 
 Declaring the type of a path parameter will give you editor support inside of your function, with error checks, completion, and so on.
+
+### Data Conversion
+
+If you run the above example and navigate your browser to http://127.0.0.1:8000/items/3, then you will see the following response:
+
+```json
+{"item_id":3}
+```
+
+Notice that the value your function received and then returned is 3, which is a Python int, not a string ("3"). So, with that type declaration, FastAPI gives you automatic **request parsing**.
+
+### 
