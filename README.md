@@ -166,4 +166,27 @@ If you run the above example and navigate your browser to http://127.0.0.1:8000/
 
 Notice that the value your function received and then returned is 3, which is a Python int, not a string ("3"). So, with that type declaration, FastAPI gives you automatic **request parsing**.
 
-### 
+### Data Validation
+
+If you point your browser to http://127.0.0.1:8000/items/foo, then you’ll see a nice HTTP error:
+
+```json
+{
+    "detail": [
+        {
+            "loc": [
+                "path",
+                "item_id"
+            ],
+            "msg": "value is not a valid integer",
+            "type": "type_error.integer"
+        }
+    ]
+}
+```
+
+This is because the path parameter item_id has a value of "foo", which is not an int.
+
+The same error would appear if you provided a float instead of an int, such as if you opened http://127.0.0.1:8000/items/4.2 in your browser. So, with the same Python type hint, FastAPI gives you both **data parsing** and **data validation**.
+
+Also notice that the error clearly states the exact point where the validation didn’t pass. This is incredibly helpful while developing and debugging code that interacts with your API.
