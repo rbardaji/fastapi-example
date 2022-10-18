@@ -83,3 +83,56 @@ INFO:     Application startup complete.
 ```
 
 The first info line in the output shows the URL where your app is being served in your local machine. Since you used --reload for development, when you update your application code, the server will reload automatically.
+
+## Check the Response
+
+Open your browser to http://127.0.0.1:8000, which will make your browser send a request to your application. It will then send a JSON response with the following:
+
+```json
+{"message": "Hello World"}
+```
+
+That JSON message is the same dictionary that you returned from the function in your application. FastAPI takes care of serializing the Python dict into a JSON object and setting the appropriate Content-Type.
+
+## Check the Interactive API Documentation
+
+Now open http://127.0.0.1:8000/docs in your browser.
+
+You will see the automatic interactive API documentation provided by Swagger UI.
+
+The browser-based user interface documenting your API is provided and integrated by default. You don’t have to do anything else to take advantage of it with FastAPI.
+
+## Check the Alternative Interactive API Documentation
+
+Now, go to http://127.0.0.1:8000/redoc in your browser.
+
+You’ll see the alternative automatic documentation provided by ReDoc.
+
+As FastAPI is based on standards like OpenAPI, there are many alternative ways to show the API documentation. FastAPI provides these two alternatives by default.
+
+## Path Parameters: Get an Item by ID
+
+You can declare path parameters or variables with the same syntax used by Python [formatted strings](https://realpython.com/python-formatted-output/):
+
+```python
+# main.py
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/items/{item_id}")
+async def read_item(item_id):
+    return {"item_id": item_id}
+```
+
+The value of the path parameter item_id will be passed to your function as the argument item_id.
+
+So, if you run this example and go to http://127.0.0.1:8000/items/foo, you will see this response:
+
+```json
+{"item_id":"foo"}
+```
+
+The response contains "foo", which is what was passed in the item_id path parameter and then returned in a dictionary.
+
